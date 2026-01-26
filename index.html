@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中小学数学计算题生成器 - 增强版</title>
+    <meta name="description" content="专业的中小学数学练习题生成器，支持1-8年级全部题型，包含计时、评分等互动功能">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <h1>📐 中小学数学计算题生成器</h1>
+        <p>支持1-8年级 | 多种题型 | 智能评分 | 个性化练习</p>
+
+        <!-- Profile Controls in Header -->
+        <div class="header-profile">
+            <select id="profileSelector" onchange="selectProfile(this.value)">
+                <option value="">选择用户...</option>
+            </select>
+            <span id="currentProfileName" class="profile-display">未选择用户</span>
+            <button class="btn-header" onclick="showProfileModal()" title="用户管理">👤 用户</button>
+            <button class="btn-header" onclick="showHistoryModal()" title="练习记录">📊 历史</button>
+        </div>
+    </header>
+
+    <!-- Controls Panel -->
+    <div class="controls">
+        <!-- Grade Selection -->
+        <div class="control-group">
+            <label>年级</label>
+            <select id="gradeSelect" onchange="updateTypes()">
+                <option value="1">一年级</option>
+                <option value="2">二年级</option>
+                <option value="3">三年级</option>
+                <option value="4">四年级</option>
+                <option value="5">五年级</option>
+                <option value="6">六年级</option>
+                <option value="7">七年级</option>
+                <option value="8">八年级</option>
+            </select>
+        </div>
+
+        <!-- Type Selection -->
+        <div class="control-group">
+            <label>题型</label>
+            <select id="typeSelect"></select>
+        </div>
+
+        <!-- Difficulty Selection -->
+        <div class="control-group">
+            <label>难度</label>
+            <select id="diffSelect">
+                <option value="1">入门</option>
+                <option value="2" selected>基础</option>
+                <option value="3">进阶</option>
+                <option value="4">挑战</option>
+            </select>
+        </div>
+
+        <!-- Question Count -->
+        <div class="control-group">
+            <label>题量</label>
+            <select id="countSelect">
+                <option value="10">10题</option>
+                <option value="20" selected>20题</option>
+                <option value="30">30题</option>
+                <option value="40">40题</option>
+            </select>
+        </div>
+
+        <!-- Action Buttons -->
+        <button class="btn-primary" onclick="generateSheet()">
+            🎲 生成试卷
+        </button>
+
+        <button class="btn-secondary" onclick="window.print()">
+            🖨️ 打印
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="btn-icon" onclick="toggleTheme()" title="切换主题">
+            🌙
+        </button>
+    </div>
+
+    <!-- Secondary Controls -->
+    <div class="controls">
+        <!-- Interactive Mode Toggle -->
+        <div class="toggle-group">
+            <span>互动模式</span>
+            <div id="interactiveToggle" class="toggle" onclick="toggleInteractiveMode()"></div>
+        </div>
+
+        <!-- Show Answers Toggle -->
+        <div class="toggle-group">
+            <span>显示答案</span>
+            <div id="answerToggle" class="toggle" onclick="toggleAnswers()"></div>
+        </div>
+
+        <!-- Timer Toggle -->
+        <button class="btn-warning" onclick="toggleTimer()">
+            ⏱️ 计时器
+        </button>
+
+        <!-- Save/Load -->
+        <button class="btn-success" onclick="saveWorksheet()">
+            💾 保存
+        </button>
+
+        <label class="btn-secondary" style="cursor: pointer;">
+            📂 加载
+            <input type="file" accept=".json" onchange="loadWorksheet(event)" style="display: none;">
+        </label>
+
+        <!-- Submit Results -->
+        <button class="btn-primary" onclick="submitWorksheet()">
+            ✅ 提交成绩
+        </button>
+    </div>
+
+    <!-- Timer Container -->
+    <div class="controls">
+        <div id="timerContainer" class="timer-container">
+            <label>时长(分钟):</label>
+            <input type="number" id="timerMinutes" value="10" min="1" max="60" style="width: 60px;">
+            <span id="timerDisplay" class="timer-display">10:00</span>
+            <button class="btn-success" onclick="startTimer()">开始</button>
+            <button class="btn-warning" onclick="stopTimer()">暂停</button>
+            <button class="btn-secondary" onclick="resetTimer()">重置</button>
+        </div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div id="statsPanel" class="stats-panel">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div id="correctCount" class="stat-value" style="color: var(--success-color);">0</div>
+                <div class="stat-label">正确</div>
+            </div>
+            <div class="stat-card">
+                <div id="incorrectCount" class="stat-value" style="color: var(--error-color);">0</div>
+                <div class="stat-label">错误</div>
+            </div>
+            <div class="stat-card">
+                <div id="totalCount" class="stat-value">0</div>
+                <div class="stat-label">已答</div>
+            </div>
+            <div class="stat-card">
+                <div id="accuracyRate" class="stat-value">0%</div>
+                <div class="stat-label">正确率</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worksheet Sheet -->
+    <div class="sheet">
+        <div class="sheet-header">
+            <h2 id="sheetTitle">数学计算练习</h2>
+            <div class="sheet-info">
+                <span>班级：__________ 姓名：__________</span>
+                <span>得分：__________</span>
+            </div>
+        </div>
+        <div class="questions-grid" id="qContainer"></div>
+    </div>
+
+    <!-- Load JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+
+</html>
