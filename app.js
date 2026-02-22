@@ -2,6 +2,294 @@
    Math Problem Generator - Core Application
    ======================================== */
 
+// === 0. Localization ===
+let currentLang = localStorage.getItem('mathGenLang') || 'zh'; // Default language
+
+const translations = {
+    zh: {
+        appTitle: "📐 中小学数学计算题生成器",
+        appSubtitle: "支持1-8年级 | 多种题型 | 智能评分 | 个性化练习",
+        selectUser: "选择用户...",
+        noUserSelected: "未选择用户",
+        userBtn: "👤 用户",
+        historyBtn: "📊 历史",
+        gradeLabel: "年级",
+        grade1: "一年级",
+        grade2: "二年级",
+        grade3: "三年级",
+        grade4: "四年级",
+        grade5: "五年级",
+        grade6: "六年级",
+        grade7: "七年级",
+        grade8: "八年级",
+        typeLabel: "题型",
+        diffLabel: "难度",
+        diff1: "入门",
+        diff2: "基础",
+        diff3: "进阶",
+        diff4: "挑战",
+        countLabel: "题量",
+        count10: "10题",
+        count20: "20题",
+        count30: "30题",
+        count40: "40题",
+        generateBtn: "🎲 生成试卷",
+        printBtn: "🖨️ 打印",
+        interactiveMode: "互动模式",
+        showAnswers: "显示答案",
+        timerBtn: "⏱️ 计时器",
+        saveBtn: "💾 保存",
+        loadBtn: "📂 加载",
+        submitBtn: "✅ 提交成绩",
+        timerMinutesLabel: "时长(分钟):",
+        timerStart: "开始",
+        timerPause: "暂停",
+        timerReset: "重置",
+        statCorrect: "正确",
+        statIncorrect: "错误",
+        statAnswered: "已答",
+        statAccuracy: "正确率",
+        sheetTitle: "数学计算练习",
+        classAndName: "班级：__________ 姓名：__________",
+        scoreLabel: "得分：__________",
+        langToggle: "🌐 English",
+        themeToggle: "切换主题",
+        promptUserName: "请输入用户名称",
+        deleteConfirm: "确定要删除用户 \"{name}\" 吗？所有练习记录将被删除。",
+        clearHistoryConfirm: "确定要清空所有练习记录吗？此操作不可恢复。",
+        timeUp: "时间到！",
+        fileError: "文件格式错误！",
+        needInteractive: "请先开启互动模式",
+        needUserHistory: "请先选择用户才能查看练习记录",
+        submitNoUser: "未选择用户，练习记录将不会保存。是否继续提交？",
+        submitSuccess: "练习完成！\n\n正确: {correct}\n错误: {incorrect}\n正确率: {accuracy}%{saved}",
+        savedSuffix: "\n\n练习记录已保存。",
+        typeNames: {
+            add_sub_20: "20以内加减法",
+            add_sub_100_simple: "100以内整十数加减",
+            add_sub_100_reg: "100以内不进位/不退位",
+            fill_blank_20: "填空题(20以内)",
+            mul_table: "表内乘法 (九九表)",
+            div_table: "表内除法",
+            add_sub_100_hard: "100以内进位/退位竖式",
+            mixed_novice: "加减乘除混合(无括号)",
+            fill_blank_mul: "填空题(乘法)",
+            mul_2d_1d: "两位数/三位数乘一位数",
+            div_2d_1d: "两位数除以一位数",
+            add_sub_large: "万以内加减法",
+            frac_simple_add: "同分母分数加减",
+            mul_big: "三位数乘两位数",
+            mixed_bracket: "四则混合运算(含括号)",
+            calc_law: "简便运算(运算律)",
+            decimal_add_sub: "小数加减法",
+            decimal_mul_div: "小数乘除法",
+            equation_simple: "解简易方程",
+            frac_diff_add: "异分母分数加减",
+            frac_mul_div: "分数乘除法",
+            percent_calc: "百分数/折扣计算",
+            ratio_solve: "解比例",
+            neg_add_sub: "有理数加减 (含负数)",
+            neg_mixed: "有理数四则混合运算",
+            poly_add_sub: "整式加减 (合并同类项)",
+            eq_linear: "一元一次方程",
+            sqrt_calc: "二次根式计算",
+            poly_mul: "整式乘法与乘法公式",
+            frac_algebra: "分式化简与计算"
+        },
+        gradeTitles: ["", "小学一年级", "小学二年级", "小学三年级", "小学四年级", "小学五年级", "小学六年级", "初中七年级", "初中八年级"],
+        modalUserTitle: "👤 用户管理",
+        modalHistoryTitle: "📊 练习记录",
+        modalAddUser: "添加新用户",
+        modalNameLabel: "名称 *",
+        modalNamePlaceholder: "请输入用户名称",
+        modalEmailLabel: "邮箱",
+        modalEmailPlaceholder: "请输入邮箱（可选）",
+        modalAddBtn: "添加用户",
+        modalExistingUsers: "已有用户",
+        modalEmptyUsers: "暂无用户，请添加新用户",
+        modalNoEmail: "未设置邮箱",
+        modalPracticeCount: "练习次数: {count}",
+        modalSelectBtn: "选择",
+        modalDeleteBtn: "删除",
+        historyUserPrefix: "用户: {name}",
+        historyClearBtn: "清空记录",
+        historyEmpty: "暂无练习记录",
+        historyHeaders: ["日期时间", "年级", "题型", "难度", "用时", "成绩"],
+        historyFormatTime: "{mins}分{secs}秒",
+        emptyDash: "-",
+    },
+    en: {
+        appTitle: "📐 K-8 Math Worksheet Generator",
+        appSubtitle: "Grades 1-8 | Varied Types | Smart Grading | Personalized",
+        selectUser: "Select User...",
+        noUserSelected: "No User Selected",
+        userBtn: "👤 User",
+        historyBtn: "📊 History",
+        gradeLabel: "Grade",
+        grade1: "Grade 1",
+        grade2: "Grade 2",
+        grade3: "Grade 3",
+        grade4: "Grade 4",
+        grade5: "Grade 5",
+        grade6: "Grade 6",
+        grade7: "Grade 7",
+        grade8: "Grade 8",
+        typeLabel: "Topic",
+        diffLabel: "Difficulty",
+        diff1: "Novice",
+        diff2: "Basic",
+        diff3: "Advanced",
+        diff4: "Challenge",
+        countLabel: "Count",
+        count10: "10 Qs",
+        count20: "20 Qs",
+        count30: "30 Qs",
+        count40: "40 Qs",
+        generateBtn: "🎲 Generate",
+        printBtn: "🖨️ Print",
+        interactiveMode: "Interactive",
+        showAnswers: "Show Answers",
+        timerBtn: "⏱️ Timer",
+        saveBtn: "💾 Save",
+        loadBtn: "📂 Load",
+        submitBtn: "✅ Submit",
+        timerMinutesLabel: "Mins:",
+        timerStart: "Start",
+        timerPause: "Pause",
+        timerReset: "Reset",
+        statCorrect: "Correct",
+        statIncorrect: "Incorrect",
+        statAnswered: "Answered",
+        statAccuracy: "Accuracy",
+        sheetTitle: "Math Practice Worksheet",
+        classAndName: "Class: __________ Name: __________",
+        scoreLabel: "Score: __________",
+        langToggle: "🌐 中文",
+        themeToggle: "Switch Theme",
+        promptUserName: "Please enter user name",
+        deleteConfirm: "Are you sure you want to delete user \"{name}\"? All history will be lost.",
+        clearHistoryConfirm: "Are you sure you want to clear all practice history? This cannot be undone.",
+        timeUp: "Time is up!",
+        fileError: "File format error!",
+        needInteractive: "Please enable interactive mode first",
+        needUserHistory: "Please select a user to view history",
+        submitNoUser: "No user selected. History will not be saved. Continue?",
+        submitSuccess: "Practice completed!\n\nCorrect: {correct}\nIncorrect: {incorrect}\nAccuracy: {accuracy}%{saved}",
+        savedSuffix: "\n\nPractice history saved.",
+        typeNames: {
+            add_sub_20: "Add/Sub within 20",
+            add_sub_100_simple: "Add/Sub multiples of 10",
+            add_sub_100_reg: "Add/Sub within 100 (no regrouping)",
+            mul_table: "Multiplication Table",
+            div_table: "Division Table",
+            add_sub_100_hard: "Add/Sub within 100 (regrouping)",
+            mixed_novice: "Mixed Operations (no brackets)",
+            fill_blank_mul: "Fill in blanks (Multiplication)",
+            mul_2d_1d: "2/3-digit × 1-digit",
+            div_2d_1d: "2-digit ÷ 1-digit",
+            add_sub_large: "Add/Sub within 10,000",
+            frac_simple_add: "Fractions Add/Sub (same den.)",
+            mul_big: "3-digit × 2-digit",
+            mixed_bracket: "Mixed Operations (with brackets)",
+            calc_law: "Calculation Laws",
+            decimal_add_sub: "Decimal Add/Sub",
+            decimal_mul_div: "Decimal Mul/Div",
+            equation_simple: "Simple Equations",
+            frac_diff_add: "Fractions Add/Sub (diff den.)",
+            frac_mul_div: "Fraction Mul/Div",
+            percent_calc: "Percentages & Discounts",
+            ratio_solve: "Solving Ratios",
+            neg_add_sub: "Rational Add/Sub (Negatives)",
+            neg_mixed: "Rational Mixed Operations",
+            poly_add_sub: "Polynomial Add/Sub",
+            eq_linear: "Linear Equations",
+            sqrt_calc: "Square Roots",
+            poly_mul: "Polynomial Multiplication",
+            frac_algebra: "Algebraic Fractions"
+        },
+        gradeTitles: ["", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8"],
+        modalUserTitle: "👤 User Management",
+        modalHistoryTitle: "📊 Practice History",
+        modalAddUser: "Add New User",
+        modalNameLabel: "Name *",
+        modalNamePlaceholder: "Enter user name",
+        modalEmailLabel: "Email",
+        modalEmailPlaceholder: "Enter email (optional)",
+        modalAddBtn: "Add User",
+        modalExistingUsers: "Existing Users",
+        modalEmptyUsers: "No users yet. Please add a user.",
+        modalNoEmail: "No email set",
+        modalPracticeCount: "Practices: {count}",
+        modalSelectBtn: "Select",
+        modalDeleteBtn: "Delete",
+        historyUserPrefix: "User: {name}",
+        historyClearBtn: "Clear History",
+        historyEmpty: "No practice history",
+        historyHeaders: ["Date & Time", "Grade", "Topic", "Difficulty", "Duration", "Score"],
+        historyFormatTime: "{mins}m {secs}s",
+        emptyDash: "-",
+    }
+};
+
+function t(key) {
+    return translations[currentLang][key] || key;
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('mathGenLang', lang);
+
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+            if (el.tagName === 'INPUT' && el.type === 'button') {
+                el.value = translations[currentLang][key];
+            } else {
+                el.innerHTML = translations[currentLang][key]; // innerHTML for emojis/spans
+            }
+        }
+    });
+
+    // Update title attributes with data-i18n-title
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (translations[currentLang][key]) {
+            el.title = translations[currentLang][key];
+        }
+    });
+
+    // Toggle button text
+    const langBtnText = document.getElementById('langBtnText');
+    if (langBtnText) {
+        langBtnText.textContent = translations[currentLang].langToggle;
+    }
+
+    // Re-render dynamic UI
+    updateTypes();
+    updateProfileDisplay();
+
+    // If sheet exists, update title
+    if (state.currentProblems.length > 0) {
+        const grade = document.getElementById('gradeSelect').value;
+        const typeSelectText = document.getElementById('typeSelect').options[document.getElementById('typeSelect').selectedIndex].text;
+        document.getElementById('sheetTitle').textContent = `${t('gradeTitles')[grade]} - ${typeSelectText}`;
+    }
+
+    // Update active modals if open
+    if (document.getElementById('profileModal')?.classList.contains('visible')) {
+        showProfileModal();
+    }
+    if (document.getElementById('historyModal')?.classList.contains('visible')) {
+        showHistoryModal();
+    }
+}
+
+function toggleLanguage() {
+    const nextLang = currentLang === 'zh' ? 'en' : 'zh';
+    setLanguage(nextLang);
+}
+
 // === 1. Curriculum Definition ===
 const curriculum = {
     "1": [
@@ -116,7 +404,7 @@ function saveProfiles() {
         }
     } catch (e) {
         console.error('Error saving profiles:', e);
-        alert('无法保存用户数据，请检查浏览器存储设置。');
+        alert(t('fileError'));
     }
 }
 
@@ -129,7 +417,7 @@ function getCurrentProfile() {
 // Add new profile
 function addProfile(name, email) {
     if (!name || name.trim() === '') {
-        alert('请输入用户名称');
+        alert(t('promptUserName'));
         return false;
     }
 
@@ -155,7 +443,7 @@ function deleteProfile(profileId) {
     const profile = profileState.profiles.find(p => p.id === profileId);
     if (!profile) return false;
 
-    if (!confirm(`确定要删除用户 "${profile.name}" 吗？所有练习记录将被删除。`)) {
+    if (!confirm(t('deleteConfirm').replace('{name}', profile.name))) {
         return false;
     }
 
@@ -194,7 +482,7 @@ function recordWorkHistory() {
     const grade = document.getElementById('gradeSelect').value;
     const typeId = document.getElementById('typeSelect').value;
     const diff = parseInt(document.getElementById('diffSelect').value);
-    const diffLabels = { 1: '入门', 2: '基础', 3: '进阶', 4: '挑战' };
+    const diffLabels = { 1: t('diff1'), 2: t('diff2'), 3: t('diff3'), 4: t('diff4') };
 
     // Find curriculum title
     let curriculumTitle = typeId;
@@ -218,7 +506,7 @@ function recordWorkHistory() {
         curriculumTitle: curriculumTitle,
         grade: grade,
         difficulty: diff,
-        difficultyLabel: diffLabels[diff] || '基础',
+        difficultyLabel: diffLabels[diff] || t('diff2'),
         timeUsedSeconds: timeUsedSeconds,
         correct: state.score.correct,
         total: state.currentProblems.length
@@ -239,11 +527,11 @@ function getWorkHistory() {
 function clearHistory() {
     const profile = getCurrentProfile();
     if (!profile) {
-        alert('请先选择用户');
+        alert(t('needUserHistory'));
         return;
     }
 
-    if (!confirm('确定要清空所有练习记录吗？此操作不可恢复。')) {
+    if (!confirm(t('clearHistoryConfirm'))) {
         return;
     }
 
@@ -257,7 +545,7 @@ function updateProfileDisplay() {
     const profile = getCurrentProfile();
     const displayEl = document.getElementById('currentProfileName');
     if (displayEl) {
-        displayEl.textContent = profile ? profile.name : '未选择用户';
+        displayEl.textContent = profile ? profile.name : t('noUserSelected');
     }
 }
 
@@ -2072,7 +2360,7 @@ function updateTypes() {
     curriculum[grade].forEach(type => {
         const option = document.createElement("option");
         option.value = type.id;
-        option.text = type.name;
+        option.text = t('typeNames')[type.id] || type.name;
         typeSelect.add(option);
     });
 }
@@ -2138,7 +2426,7 @@ function startTimer() {
 
         if (state.timerSeconds <= 0) {
             stopTimer();
-            alert('时间到！');
+            alert(t('timeUp'));
         }
     }, 1000);
 }
@@ -2246,11 +2534,9 @@ function generateSheet() {
     }
 
     // Update title
-    const typeText = document.getElementById('typeSelect').selectedOptions[0].text;
-    const gradeNames = ["", "一", "二", "三", "四", "五", "六", "七", "八"];
-    const level = parseInt(grade) >= 7 ? '初中' : '小学';
+    const typeSelectText = document.getElementById('typeSelect').options[document.getElementById('typeSelect').selectedIndex].text;
     document.getElementById('sheetTitle').textContent =
-        `${level}${gradeNames[grade]}年级 - ${typeText}`;
+        `${t('gradeTitles')[grade]} - ${typeSelectText}`;
 
     renderProblems();
 
@@ -2354,7 +2640,7 @@ function loadWorksheet(event) {
 
             renderProblems();
         } catch (err) {
-            alert('文件格式错误！');
+            alert(t('fileError'));
         }
     };
     reader.readAsText(file);
@@ -2367,7 +2653,7 @@ function renderProfileSelector() {
     const selector = document.getElementById('profileSelector');
     if (!selector) return;
 
-    selector.innerHTML = '<option value="">选择用户...</option>';
+    selector.innerHTML = `<option value="">${t('selectUser')}</option>`;
     profileState.profiles.forEach(profile => {
         const option = document.createElement('option');
         option.value = profile.id;
@@ -2385,7 +2671,7 @@ function renderProfileList() {
     if (!container) return;
 
     if (profileState.profiles.length === 0) {
-        container.innerHTML = '<div class="profile-empty">暂无用户，请添加新用户</div>';
+        container.innerHTML = `<div class="profile-empty">${t('modalEmptyUsers')}</div>`;
         return;
     }
 
@@ -2393,12 +2679,12 @@ function renderProfileList() {
         <div class="profile-item ${profile.id === profileState.currentProfileId ? 'active' : ''}">
             <div class="profile-info">
                 <div class="profile-name">${profile.name}</div>
-                <div class="profile-email">${profile.email || '未设置邮箱'}</div>
-                <div class="profile-stats">练习次数: ${profile.history ? profile.history.length : 0}</div>
+                <div class="profile-email">${profile.email || t('modalNoEmail')}</div>
+                <div class="profile-stats">${t('modalPracticeCount').replace('{count}', profile.history ? profile.history.length : 0)}</div>
             </div>
             <div class="profile-actions">
-                <button class="btn-small btn-primary" onclick="selectProfile('${profile.id}'); closeProfileModal();">选择</button>
-                <button class="btn-small btn-danger" onclick="deleteProfile('${profile.id}')">删除</button>
+                <button class="btn-small btn-primary" onclick="selectProfile('${profile.id}'); closeProfileModal();">${t('modalSelectBtn')}</button>
+                <button class="btn-small btn-danger" onclick="deleteProfile('${profile.id}')">${t('modalDeleteBtn')}</button>
             </div>
         </div>
     `).join('');
@@ -2414,30 +2700,40 @@ function showProfileModal() {
         modal.innerHTML = `
             <div class="modal-container">
                 <div class="modal-header">
-                    <h3>👤 用户管理</h3>
+                    <h3 id="modalUserTitle">${t('modalUserTitle')}</h3>
                     <button class="modal-close" onclick="closeProfileModal()">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="profile-form">
-                        <h4>添加新用户</h4>
+                        <h4 id="modalAddUserTitle">${t('modalAddUser')}</h4>
                         <div class="form-group">
-                            <label>名称 *</label>
-                            <input type="text" id="newProfileName" placeholder="请输入用户名称">
+                            <label id="modalNameLabel">${t('modalNameLabel')}</label>
+                            <input type="text" id="newProfileName" placeholder="${t('modalNamePlaceholder')}">
                         </div>
                         <div class="form-group">
-                            <label>邮箱</label>
-                            <input type="email" id="newProfileEmail" placeholder="请输入邮箱（可选）">
+                            <label id="modalEmailLabel">${t('modalEmailLabel')}</label>
+                            <input type="email" id="newProfileEmail" placeholder="${t('modalEmailPlaceholder')}">
                         </div>
-                        <button class="btn-success" onclick="addProfileFromForm()">添加用户</button>
+                        <button id="modalAddBtn" class="btn-success" onclick="addProfileFromForm()">${t('modalAddBtn')}</button>
                     </div>
                     <div class="profile-list-section">
-                        <h4>已有用户</h4>
+                        <h4 id="modalExistingUsersTitle">${t('modalExistingUsers')}</h4>
                         <div id="profileList" class="profile-list"></div>
                     </div>
                 </div>
             </div>
         `;
         document.body.appendChild(modal);
+    } else {
+        // Update texts directly attached to elements if recreating doesn't happen
+        document.getElementById('modalUserTitle').textContent = t('modalUserTitle');
+        document.getElementById('modalAddUserTitle').textContent = t('modalAddUser');
+        document.getElementById('modalNameLabel').textContent = t('modalNameLabel');
+        document.getElementById('newProfileName').placeholder = t('modalNamePlaceholder');
+        document.getElementById('modalEmailLabel').textContent = t('modalEmailLabel');
+        document.getElementById('newProfileEmail').placeholder = t('modalEmailPlaceholder');
+        document.getElementById('modalAddBtn').textContent = t('modalAddBtn');
+        document.getElementById('modalExistingUsersTitle').textContent = t('modalExistingUsers');
     }
 
     renderProfileList();
@@ -2467,7 +2763,7 @@ function addProfileFromForm() {
 function showHistoryModal() {
     const profile = getCurrentProfile();
     if (!profile) {
-        alert('请先选择用户才能查看练习记录');
+        alert(t('needUserHistory'));
         return;
     }
 
@@ -2479,22 +2775,25 @@ function showHistoryModal() {
         modal.innerHTML = `
             <div class="modal-container modal-large">
                 <div class="modal-header">
-                    <h3>📊 练习记录</h3>
+                    <h3 id="modalHistoryTitle">${t('modalHistoryTitle')}</h3>
                     <button class="modal-close" onclick="closeHistoryModal()">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="history-info">
                         <span id="historyProfileName"></span>
-                        <button class="btn-small btn-warning" onclick="clearHistory()">清空记录</button>
+                        <button id="historyClearBtn" class="btn-small btn-warning" onclick="clearHistory()">${t('historyClearBtn')}</button>
                     </div>
                     <div id="historyTableContainer" class="history-table-container"></div>
                 </div>
             </div>
         `;
         document.body.appendChild(modal);
+    } else {
+        document.getElementById('modalHistoryTitle').textContent = t('modalHistoryTitle');
+        document.getElementById('historyClearBtn').textContent = t('historyClearBtn');
     }
 
-    document.getElementById('historyProfileName').textContent = `用户: ${profile.name}`;
+    document.getElementById('historyProfileName').textContent = t('historyUserPrefix').replace('{name}', profile.name);
     renderHistoryTable();
     modal.classList.add('visible');
 }
@@ -2507,7 +2806,6 @@ function closeHistoryModal() {
     }
 }
 
-// Render history table
 function renderHistoryTable() {
     const container = document.getElementById('historyTableContainer');
     if (!container) return;
@@ -2515,39 +2813,41 @@ function renderHistoryTable() {
     const history = getWorkHistory();
 
     if (history.length === 0) {
-        container.innerHTML = '<div class="history-empty">暂无练习记录</div>';
+        container.innerHTML = `<div class="history-empty">${t('historyEmpty')}</div>`;
         return;
     }
 
     // Sort by datetime descending (newest first)
     const sorted = [...history].sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
 
+    const headers = t('historyHeaders');
+
     container.innerHTML = `
         <table class="history-table">
             <thead>
                 <tr>
-                    <th>日期时间</th>
-                    <th>年级</th>
-                    <th>题型</th>
-                    <th>难度</th>
-                    <th>用时</th>
-                    <th>成绩</th>
+                    <th>${headers[0]}</th>
+                    <th>${headers[1]}</th>
+                    <th>${headers[2]}</th>
+                    <th>${headers[3]}</th>
+                    <th>${headers[4]}</th>
+                    <th>${headers[5]}</th>
                 </tr>
             </thead>
             <tbody>
                 ${sorted.map(entry => {
         const date = new Date(entry.datetime);
-        const dateStr = date.toLocaleDateString('zh-CN');
-        const timeStr = date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        const localeTag = currentLang === 'en' ? 'en-US' : 'zh-CN';
+        const dateStr = date.toLocaleDateString(localeTag);
+        const timeStr = date.toLocaleTimeString(localeTag, { hour: '2-digit', minute: '2-digit' });
         const duration = formatDuration(entry.timeUsedSeconds);
         const accuracy = entry.total > 0 ? Math.round((entry.correct / entry.total) * 100) : 0;
-        const gradeNames = { 1: '一年级', 2: '二年级', 3: '三年级', 4: '四年级', 5: '五年级', 6: '六年级', 7: '七年级', 8: '八年级' };
 
         return `
                         <tr>
                             <td>${dateStr} ${timeStr}</td>
-                            <td>${gradeNames[entry.grade] || entry.grade}</td>
-                            <td>${entry.curriculumTitle}</td>
+                            <td>${t('gradeTitles')[entry.grade] || entry.grade}</td>
+                            <td>${t('typeNames')[entry.curriculumId] || entry.curriculumTitle}</td>
                             <td>${entry.difficultyLabel}</td>
                             <td>${duration}</td>
                             <td class="${accuracy >= 80 ? 'good' : accuracy >= 60 ? 'ok' : 'poor'}">${entry.correct}/${entry.total} (${accuracy}%)</td>
@@ -2561,22 +2861,22 @@ function renderHistoryTable() {
 
 // Format duration in seconds to mm:ss
 function formatDuration(seconds) {
-    if (!seconds || seconds === 0) return '-';
+    if (!seconds || seconds === 0) return t('emptyDash');
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}分${secs.toString().padStart(2, '0')}秒`;
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    return t('historyFormatTime').replace('{mins}', mins).replace('{secs}', secs);
 }
 
 // Submit worksheet results and save to history
 function submitWorksheet() {
     if (!state.isInteractiveMode) {
-        alert('请先开启互动模式');
+        alert(t('needInteractive'));
         return;
     }
 
     const profile = getCurrentProfile();
     if (!profile) {
-        if (confirm('未选择用户，练习记录将不会保存。是否继续提交？')) {
+        if (confirm(t('submitNoUser'))) {
             return;
         }
     }
@@ -2586,11 +2886,12 @@ function submitWorksheet() {
 
     // Show completion message
     const accuracy = state.score.total > 0 ? Math.round((state.score.correct / state.score.total) * 100) : 0;
-    let message = `练习完成！\n\n正确: ${state.score.correct}\n错误: ${state.score.incorrect}\n正确率: ${accuracy}%`;
-
-    if (profile) {
-        message += '\n\n练习记录已保存。';
-    }
+    const savedStr = profile ? t('savedSuffix') : '';
+    const message = t('submitSuccess')
+        .replace('{correct}', state.score.correct)
+        .replace('{incorrect}', state.score.incorrect)
+        .replace('{accuracy}', accuracy)
+        .replace('{saved}', savedStr);
 
     alert(message);
 }
@@ -2599,8 +2900,7 @@ function submitWorksheet() {
 window.onload = function () {
     loadConfig();
     loadProfiles();
-    updateTypes();
-    generateSheet();
+    setLanguage(currentLang); // Use our new setter which initializes the UI
     updateTimerDisplay();
     renderProfileSelector();
     updateProfileDisplay();

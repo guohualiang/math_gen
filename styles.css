@@ -4,41 +4,43 @@
 
 /* === CSS Custom Properties (Theming) === */
 :root {
+    /* UI-UX-Pro-Max Theme: Educational App (Deep blue + energetic orange) */
     /* Light Theme */
-    --bg-primary: #f5f6fa;
+    --bg-primary: #eff6ff;
     --bg-secondary: #ffffff;
     --bg-controls: #ffffff;
-    --text-primary: #333333;
-    --text-secondary: #555555;
+    --text-primary: #172554;
+    --text-secondary: #1e3a8a;
     --text-muted: #888888;
-    --border-color: #ddd;
-    --border-dashed: #eee;
-    --accent-color: #3498db;
-    --accent-hover: #2980b9;
-    --primary-color: #2c3e50;
-    --success-color: #27ae60;
-    --error-color: #e74c3c;
-    --warning-color: #f39c12;
-    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --gradient-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --border-color: #bfdbfe;
+    --border-dashed: #93c5fd;
+    --accent-color: #2563eb;
+    --accent-hover: #1d4ed8;
+    --primary-color: #2563eb;
+    --success-color: #22C55E;
+    --error-color: #EF4444;
+    --warning-color: #F97316;
+    --shadow-sm: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(37, 99, 235, 0.1), 0 4px 6px -2px rgba(37, 99, 235, 0.05);
+    --gradient-header: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
 }
 
 [data-theme="dark"] {
-    --bg-primary: #1a1a2e;
-    --bg-secondary: #16213e;
-    --bg-controls: #0f3460;
-    --text-primary: #f1f1f1;
-    --text-secondary: #cccccc;
-    --text-muted: #888888;
-    --border-color: #334155;
-    --border-dashed: #3d5a80;
+    /* Dark Theme */
+    --bg-primary: #172554;
+    --bg-secondary: #1e3a8a;
+    --bg-controls: #1e40af;
+    --text-primary: #eff6ff;
+    --text-secondary: #bfdbfe;
+    --text-muted: #93c5fd;
+    --border-color: #2563eb;
+    --border-dashed: #1d4ed8;
     --accent-color: #60a5fa;
-    --accent-hover: #3b82f6;
-    --primary-color: #1e3a5f;
-    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 5px 15px rgba(0, 0, 0, 0.4);
-    --gradient-header: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+    --accent-hover: #93c5fd;
+    --primary-color: #1e3a8a;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --gradient-header: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
 }
 
 /* === Base Styles === */
