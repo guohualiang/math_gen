@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
                     'Authorization': `Bearer ${resendKey}`,
                 },
                 body: JSON.stringify({
-                    from: 'Math Gen <noreply@resend.dev>',
+                    from: 'Math Gen <onboarding@resend.dev>',
                     to: [user.email],
                     subject: `📊 ${kidName}'s Math Practice Results - ${typeName}`,
                     html: `
